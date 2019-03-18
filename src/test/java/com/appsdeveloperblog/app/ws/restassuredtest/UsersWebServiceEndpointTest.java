@@ -92,4 +92,40 @@ class UsersWebServiceEndpointTest {
 
 	}
 
+	/*
+	 * Test UpdateUserDetails
+	 */
+	@Test
+	final void c() {
+		Map<String, Object> userDetails = new HashMap<>();
+		userDetails.put("firstName", "Test");
+		userDetails.put("lastName", "User");
+
+		Response response = given()
+		.contentType(JSON)
+		.accept(JSON)
+		.header("authorization", authorizationHeader)
+		.pathParam("id", userId)
+		.body(userDetails)
+		.when()
+		.put(CONTEXT_PATH + "/users/{id}")
+		.then()
+		.statusCode(200)
+		.contentType(JSON)
+		.extract()
+		.response();
+
+		String firstName = response.jsonPath().getString("firstName");
+		String lastName = response.jsonPath().getString("lastName");
+
+		List<Map<String, String>> storedAddresses = response.jsonPath().getList("addresses");
+
+		assertEquals("Test", firstName);
+		assertEquals("User", lastName);
+		assertNotNull(storedAddresses);
+		assertTrue(addresses.size() == storedAddresses.size());
+		assertEquals(addresses.get(0).get("streetName"), storedAddresses.get(0).get("streetName"));
+
+	}
+
 }
