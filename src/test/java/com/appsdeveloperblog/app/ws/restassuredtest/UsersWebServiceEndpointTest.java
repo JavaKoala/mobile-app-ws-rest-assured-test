@@ -128,4 +128,23 @@ class UsersWebServiceEndpointTest {
 
 	}
 
+	/*
+	 * Test testDeleteUser
+	 */
+	final void d() {
+		Response response = given()
+		.header("Authorization", authorizationHeader)
+		.pathParam("id", userId)
+		.when()
+		.delete(CONTEXT_PATH + "/users/{id}")
+		.then()
+		.statusCode(200)
+		.contentType(JSON)
+		.extract()
+		.response();
+
+		String operationResult = response.jsonPath().getString("operationResult");
+		assertEquals("SUCCESS", operationResult);
+	}
+
 }
